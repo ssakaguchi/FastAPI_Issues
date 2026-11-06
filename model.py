@@ -2,34 +2,36 @@ from datetime import time
 from decimal import Decimal
 
 from sqlalchemy import DECIMAL
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlmodel import Field, SQLModel
 
 
-class Base(DeclarativeBase):
-    group_id: Mapped[str] = mapped_column("groupId", primary_key=True)
+class Base(SQLModel):
+    group_id: str = Field(primary_key=True, sa_column_kwargs={"name": "groupId"})
 
 
-class NonstandardWorkType(Base):
+class NonstandardWorkType(Base, table=True):
     __tablename__ = "nonstandardWorkTypes"
 
-    nonstandard_work_type_code: Mapped[str] = mapped_column(
-        "nonstandardWorkTypeCode", primary_key=True
+    nonstandard_work_type_code: str = Field(
+        primary_key=True, sa_column_kwargs={"name": "nonstandardWorkTypeCode"}
     )
 
 
-class RoutineWork(Base):
+class RoutineWork(Base, table=True):
     __tablename__ = "routineWorks"
 
-    nonstandard_work_code: Mapped[str] = mapped_column(
-        "nonstandardWorkCode", primary_key=True
+    nonstandard_work_code: str = Field(
+        primary_key=True, sa_column_kwargs={"name": "nonstandardWorkCode"}
     )
-    is_night_shift: Mapped[int] = mapped_column("isNightShift")
-    is_next_day: Mapped[int] = mapped_column("isNextDay")
-    start_time: Mapped[time] = mapped_column("startTime")
-    working_time: Mapped[Decimal] = mapped_column("workingTime", DECIMAL(4, 0))
+    is_night_shift: int = Field(sa_column_kwargs={"name": "isNightShift"})
+    is_next_day: int = Field(sa_column_kwargs={"name": "isNextDay"})
+    start_time: time = Field(sa_column_kwargs={"name": "startTime"})
+    working_time: Decimal = Field(
+        sa_type=DECIMAL(4, 0), sa_column_kwargs={"name": "workingTime"}
+    )
 
 
-class ProcessType(Base):
+class ProcessType(Base, table=True):
     __tablename__ = "processTypes"
 
-    r_number: Mapped[str] = mapped_column("rNumber", primary_key=True)
+    r_number: str = Field(primary_key=True, sa_column_kwargs={"name": "rNumber"})
